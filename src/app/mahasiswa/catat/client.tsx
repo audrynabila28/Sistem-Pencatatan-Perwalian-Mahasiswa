@@ -85,7 +85,7 @@ export default function CatatPerwalianClient({
                 value={tahunAkademik}
                 onChange={(e) => setTahunAkademik(e.target.value)}
                 placeholder="Misal: 2023/2024"
-                className="w-full rounded-md border-gray-300 shadow-sm focus:border-slate-500 focus:ring-slate-500 sm:text-sm border p-2.5"
+                className="w-full rounded-md border-gray-300 shadow-sm focus:border-slate-500 focus:ring-slate-500 sm:text-sm border p-2.5 bg-white text-gray-900"
               />
             </div>
             <div>
@@ -94,7 +94,7 @@ export default function CatatPerwalianClient({
                 required
                 value={semester}
                 onChange={(e) => setSemester(e.target.value)}
-                className="w-full rounded-md border-gray-300 shadow-sm focus:border-slate-500 focus:ring-slate-500 sm:text-sm border p-2.5"
+                className="w-full rounded-md border-gray-300 shadow-sm focus:border-slate-500 focus:ring-slate-500 sm:text-sm border p-2.5 bg-white text-gray-900"
               >
                 <option value="Ganjil">Ganjil</option>
                 <option value="Genap">Genap</option>
@@ -111,7 +111,7 @@ export default function CatatPerwalianClient({
               value={catatan}
               onChange={(e) => setCatatan(e.target.value)}
               placeholder="Tuliskan mata kuliah yang disetujui, permasalahan, atau catatan penting lainnya..."
-              className="w-full rounded-md border-gray-300 shadow-sm focus:border-slate-500 focus:ring-slate-500 sm:text-sm border p-2.5"
+              className="w-full rounded-md border-gray-300 shadow-sm focus:border-slate-500 focus:ring-slate-500 sm:text-sm border p-2.5 bg-white text-gray-900"
             />
           </div>
 

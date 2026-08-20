@@ -61,8 +61,8 @@ export default async function HistoriDosenPage() {
                       {format(new Date(item.tanggal), 'dd MMM yyyy HH:mm', { locale: id })}
                     </td>
                     <td className="px-6 py-4">
-                      <div className="text-sm font-medium text-gray-900">{item.mahasiswa?.nama}</div>
-                      <div className="text-sm text-gray-500">{item.mahasiswa?.nim_nip}</div>
+                      <div className="text-sm font-medium text-gray-900">{item.mahasiswa?.[0]?.nama || '-'}</div>
+                      <div className="text-sm text-gray-500">{item.mahasiswa?.[0]?.nim_nip || '-'}</div>
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
                       {item.tahun_akademik} - {item.semester}

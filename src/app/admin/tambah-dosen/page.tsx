@@ -57,7 +57,7 @@ export default function TambahDosenPage() {
                 name="nama"
                 type="text"
                 required
-                className="w-full rounded-md border-gray-300 shadow-sm focus:border-slate-500 focus:ring-slate-500 sm:text-sm border p-2"
+                className="w-full rounded-md border-gray-300 shadow-sm focus:border-slate-500 focus:ring-slate-500 sm:text-sm border p-2 text-gray-900"
                 placeholder="Masukkan nama lengkap"
               />
             </div>
@@ -68,7 +68,7 @@ export default function TambahDosenPage() {
                 name="nip"
                 type="text"
                 required
-                className="w-full rounded-md border-gray-300 shadow-sm focus:border-slate-500 focus:ring-slate-500 sm:text-sm border p-2"
+                className="w-full rounded-md border-gray-300 shadow-sm focus:border-slate-500 focus:ring-slate-500 sm:text-sm border p-2 text-gray-900"
                 placeholder="Masukkan NIP atau NIDN"
               />
             </div>
@@ -78,7 +78,7 @@ export default function TambahDosenPage() {
               <select
                 name="prodi"
                 required
-                className="w-full rounded-md border-gray-300 shadow-sm focus:border-slate-500 focus:ring-slate-500 sm:text-sm border p-2 bg-white"
+                className="w-full rounded-md border-gray-300 shadow-sm focus:border-slate-500 focus:ring-slate-500 sm:text-sm border p-2 bg-white text-gray-900"
               >
                 <option value="">-- Pilih Jurusan --</option>
                 <option value="Teknik Informatika">Teknik Informatika</option>
