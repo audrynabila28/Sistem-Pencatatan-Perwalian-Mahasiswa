@@ -1,32 +1,63 @@
 # Sistem Pencatatan Perwalian Mahasiswa STMIK Bandung
 
-Aplikasi web terpadu untuk memfasilitasi, mencatat, dan merekapitulasi proses perwalian akademik antara Mahasiswa dan Dosen Wali di lingkungan kampus STMIK Bandung.
+Aplikasi web untuk membantu proses pencatatan, pemantauan, dan rekapitulasi kegiatan perwalian akademik antara mahasiswa dan dosen wali di lingkungan STMIK Bandung.
 
-## 🚀 Fitur Utama
+## Fitur Utama
 
-Sistem ini menggunakan pendekatan hak akses (*Role-Based Access Control*) yang ketat layaknya SIAKAD (Sistem Informasi Akademik) pada umumnya. 
-**Tidak ada registrasi publik**. Pembuatan akun sepenuhnya dikendalikan oleh pihak Admin kampus.
+Sistem menerapkan **Role-Based Access Control (RBAC)** untuk membatasi akses berdasarkan peran pengguna. Tidak tersedia registrasi akun secara umum karena seluruh pembuatan dan pengelolaan akun dilakukan oleh Admin.
 
-### 👑 1. Admin
-- **Manajemen Akun Terpusat**: Admin bertugas membuat akun Mahasiswa dan Dosen. Sistem secara otomatis membuatkan username (NIM/NIP) dan password default.
-- **Pemetaan Dosen Wali**: Admin menentukan dosen wali untuk masing-masing mahasiswa.
-- **Rekap Perwalian**: Admin dapat memantau dan mencetak rekap data perwalian seluruh mahasiswa secara *real-time*.
+### Admin
 
-### 👨‍🏫 2. Dosen Wali
-- **Dashboard Pemantauan**: Dosen dapat melihat daftar mahasiswa perwaliannya beserta riwayat/histori bimbingan tiap semesternya.
-- **Validasi (Mendatang)**: Memantau catatan dan keluhan mahasiswa selama perwalian.
+- Membuat dan mengelola akun mahasiswa serta dosen.
+- Sistem membuat username berdasarkan NIM/NIP dan memberikan password awal.
+- Menentukan dosen wali untuk setiap mahasiswa.
+- Melihat dan merekap data perwalian seluruh mahasiswa.
+- Memantau data perwalian secara terpusat.
 
-### 🎓 3. Mahasiswa
-- **Pencatatan Perwalian Mandiri**: Mahasiswa melakukan input data perwalian (Tahun Akademik, Semester, Catatan/Konsultasi) melalui form yang sudah otomatis terhubung dengan dosen walinya.
-- **Histori Perwalian**: Melihat riwayat lengkap perwalian dari semester-semester sebelumnya.
+### Dosen Wali
 
-### 🔒 Keamanan Khusus
-- **Force Change Password**: Saat akun mahasiswa atau dosen baru dibuat oleh Admin, mereka diwajibkan mengubah password default pada saat login pertama kali untuk memastikan kerahasiaan akun.
+- Melihat daftar mahasiswa yang berada di bawah perwaliannya.
+- Melihat riwayat perwalian mahasiswa pada setiap semester.
+- Memantau catatan dan hasil konsultasi mahasiswa.
+- Fitur validasi perwalian akan dikembangkan pada tahap berikutnya.
 
-## 🛠️ Tech Stack
+### Mahasiswa
 
-- **Framework**: [Next.js 15 (App Router)](https://nextjs.org/)
-- **Database & Auth**: [Supabase](https://supabase.com/) (PostgreSQL & Supabase Auth)
-- **Styling**: [Tailwind CSS](https://tailwindcss.com/)
-- **Icons**: [Lucide React](https://lucide.dev/)
+- Mengisi data perwalian secara mandiri.
+- Mencatat tahun akademik, semester, serta catatan atau hasil konsultasi.
+- Data perwalian otomatis terhubung dengan dosen wali yang telah ditentukan oleh Admin.
+- Melihat riwayat perwalian dari semester sebelumnya.
 
+## Keamanan
+
+Sistem menggunakan pembatasan akses berdasarkan role untuk memastikan setiap pengguna hanya dapat mengakses fitur dan data sesuai kewenangannya.
+
+### Force Change Password
+
+Akun mahasiswa dan dosen yang baru dibuat oleh Admin akan menggunakan password awal. Pada login pertama, pengguna diwajibkan mengganti password tersebut sebelum dapat menggunakan sistem secara penuh.
+
+### Database & Authentication
+
+Database dan autentikasi menggunakan **Supabase**, dengan PostgreSQL sebagai database utama dan Supabase Auth untuk pengelolaan akun pengguna.
+
+Akses terhadap data dikontrol melalui autentikasi dan kebijakan keamanan database (Row Level Security/RLS), sehingga data tidak dapat diakses atau dimodifikasi secara sembarangan.
+
+## Tech Stack
+
+- **Framework:** Next.js 15 (App Router)
+- **Database:** Supabase PostgreSQL
+- **Authentication:** Supabase Auth
+- **Styling:** Tailwind CSS
+- **Icons:** Lucide React
+
+## Struktur Role
+
+| Role | Akses Utama |
+|------|-------------|
+| Admin | Manajemen akun, dosen wali, dan rekap seluruh data |
+| Dosen Wali | Melihat mahasiswa dan riwayat perwalian |
+| Mahasiswa | Mengisi dan melihat riwayat perwalian |
+
+## Status Pengembangan
+
+Project masih dalam tahap pengembangan. Beberapa fitur, seperti validasi perwalian oleh Dosen Wali, akan dikembangkan pada tahap berikutnya.
