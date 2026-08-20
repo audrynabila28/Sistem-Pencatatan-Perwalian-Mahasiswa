@@ -5,6 +5,7 @@ import { usePathname } from 'next/navigation'
 import { Users, FileText, LayoutDashboard, History, Settings, LogOut } from 'lucide-react'
 import { createClient } from '@/utils/supabase/client'
 import { useRouter } from 'next/navigation'
+import Image from 'next/image'
 
 interface SidebarProps {
   role: string | null
@@ -21,7 +22,13 @@ export function Sidebar({ role }: SidebarProps) {
     router.refresh()
   }
 
-  let menuItems = []
+  type MenuItem = {
+  name: string
+  href: string
+  icon: React.ElementType
+}
+
+let menuItems: MenuItem[] = []
 
   if (role === 'admin') {
     menuItems = [
@@ -46,9 +53,16 @@ export function Sidebar({ role }: SidebarProps) {
 
   return (
     <div className="flex flex-col w-64 bg-slate-900 text-white min-h-screen">
-      <div className="h-16 flex items-center justify-center border-b border-slate-800">
-        <div className="h-10 w-32 bg-slate-800 rounded animate-pulse flex items-center justify-center text-xs text-slate-500">
-          [Slot Logo]
+      <div className="h-16 flex items-center justify-center">
+        <div className="mx-auto h-16 w-32 relative">
+          <Image
+            src="/logo-stmik.png"
+            alt="Logo STMIK Bandung"
+            fill
+            sizes="128px"
+            className="object-contain"
+            priority
+            />
         </div>
       </div>
       <div className="flex-1 overflow-y-auto py-4">
