@@ -112,7 +112,7 @@ export default function DosenWaliClient({
                 required
                 value={selectedMahasiswa}
                 onChange={(e) => setSelectedMahasiswa(e.target.value)}
-                className="w-full rounded-md border-gray-300 shadow-sm focus:border-slate-500 focus:ring-slate-500 sm:text-sm border p-2"
+                className="w-full rounded-md border-gray-300 shadow-sm focus:border-slate-500 focus:ring-slate-500 sm:text-sm border p-2 bg-white text-gray-900"
               >
                 <option value="">-- Pilih Mahasiswa --</option>
                 {availableMahasiswa.map((m) => (
@@ -132,7 +132,7 @@ export default function DosenWaliClient({
                 required
                 value={selectedDosen}
                 onChange={(e) => setSelectedDosen(e.target.value)}
-                className="w-full rounded-md border-gray-300 shadow-sm focus:border-slate-500 focus:ring-slate-500 sm:text-sm border p-2"
+                className="w-full rounded-md border-gray-300 shadow-sm focus:border-slate-500 focus:ring-slate-500 sm:text-sm border p-2 bg-white text-gray-900"
               >
                 <option value="">-- Pilih Dosen --</option>
                 {dosenList.map((d) => (
