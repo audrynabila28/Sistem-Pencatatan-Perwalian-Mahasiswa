@@ -1,36 +1,81 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Sistem Pencatatan Perwalian Mahasiswa STMIK Bandung
 
-## Getting Started
+Aplikasi web terpadu untuk memfasilitasi, mencatat, dan merekapitulasi proses perwalian akademik antara Mahasiswa dan Dosen Wali di lingkungan kampus STMIK Bandung.
 
-First, run the development server:
+## 🚀 Fitur Utama
 
+Sistem ini menggunakan pendekatan hak akses (*Role-Based Access Control*) yang ketat layaknya SIAKAD (Sistem Informasi Akademik) pada umumnya. 
+**Tidak ada registrasi publik**. Pembuatan akun sepenuhnya dikendalikan oleh pihak Admin kampus.
+
+### 👑 1. Admin
+- **Manajemen Akun Terpusat**: Admin bertugas membuat akun Mahasiswa dan Dosen. Sistem secara otomatis membuatkan username (NIM/NIP) dan password default.
+- **Pemetaan Dosen Wali**: Admin menentukan dosen wali untuk masing-masing mahasiswa.
+- **Rekap Perwalian**: Admin dapat memantau dan mencetak rekap data perwalian seluruh mahasiswa secara *real-time*.
+
+### 👨‍🏫 2. Dosen Wali
+- **Dashboard Pemantauan**: Dosen dapat melihat daftar mahasiswa perwaliannya beserta riwayat/histori bimbingan tiap semesternya.
+- **Validasi (Mendatang)**: Memantau catatan dan keluhan mahasiswa selama perwalian.
+
+### 🎓 3. Mahasiswa
+- **Pencatatan Perwalian Mandiri**: Mahasiswa melakukan input data perwalian (Tahun Akademik, Semester, Catatan/Konsultasi) melalui form yang sudah otomatis terhubung dengan dosen walinya.
+- **Histori Perwalian**: Melihat riwayat lengkap perwalian dari semester-semester sebelumnya.
+
+### 🔒 Keamanan Khusus
+- **Force Change Password**: Saat akun mahasiswa atau dosen baru dibuat oleh Admin, mereka diwajibkan mengubah password default pada saat login pertama kali untuk memastikan kerahasiaan akun.
+
+## 🛠️ Tech Stack
+
+- **Framework**: [Next.js 15 (App Router)](https://nextjs.org/)
+- **Database & Auth**: [Supabase](https://supabase.com/) (PostgreSQL & Supabase Auth)
+- **Styling**: [Tailwind CSS](https://tailwindcss.com/)
+- **Icons**: [Lucide React](https://lucide.dev/)
+
+## ⚙️ Panduan Instalasi & Setup Lokal
+
+Ikuti langkah-langkah di bawah ini untuk menjalankan project di komputer lokal Anda:
+
+### 1. Clone Repository
 ```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+git clone https://github.com/audrynabila28/Sistem-Pencatatan-Perwalian-Mahasiswa.git
+cd Sistem-Pencatatan-Perwalian-Mahasiswa
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+### 2. Install Dependencies
+```bash
+npm install
+```
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+### 3. Setup Supabase
+1. Buat project baru di [Supabase Dashboard](https://supabase.com).
+2. Buka menu **SQL Editor**, salin seluruh kode dari file `supabase/schema.sql`, dan **Run** untuk membuat seluruh tabel dan *Row Level Security (RLS)*.
+3. Buka menu **Project Settings > API**, lalu salin URL dan API Keys.
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+### 4. Konfigurasi Environment Variables
+Buat file bernama `.env.local` di root folder project, dan masukkan konfigurasi Supabase Anda:
+```env
+NEXT_PUBLIC_SUPABASE_URL=https://[PROJECT_ID].supabase.co
+NEXT_PUBLIC_SUPABASE_ANON_KEY=ey...
+SUPABASE_SERVICE_ROLE_KEY=ey...
+```
 
-## Learn More
+### 5. Buat Akun Admin Pertama
+Karena aplikasi ini mengunci fitur registrasi publik, Anda harus membuat akun Admin pertama secara manual:
+1. Di Dashboard Supabase, pergi ke **Authentication > Users**.
+2. Klik **Add User** -> **Create new user**.
+3. Masukkan Email: `admin@stmik.edu` *(Domain harus valid agar sistem bisa mendeteksinya sebagai username `admin`)*.
+4. Masukkan Password: (misalnya `admin123`).
+5. **Salin User UID** yang terbentuk.
+6. Buka **SQL Editor** kembali, lalu jalankan perintah ini (Ganti `[UID-DARI-AUTH]` dengan UID yang disalin tadi):
+```sql
+INSERT INTO profiles (id, username, role, nama, nim_nip, is_default_password) 
+VALUES ('[UID-DARI-AUTH]', 'admin', 'admin', 'Administrator Utama', 'ADM001', false);
+```
 
-To learn more about Next.js, take a look at the following resources:
+### 6. Jalankan Server
+```bash
+npm run dev
+```
+Buka browser di `http://localhost:3000`. Login menggunakan Username `admin` dan password yang Anda buat di atas. Anda sudah bisa mulai menginput data Dosen dan Mahasiswa!
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+## 📝 Lisensi
+Dibuat untuk keperluan akademik dan pencatatan perwalian internal STMIK Bandung.
