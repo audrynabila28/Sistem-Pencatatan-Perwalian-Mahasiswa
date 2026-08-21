@@ -1,16 +1,40 @@
+import { createClient } from '@/utils/supabase/server'
+import DashboardClient from './DashboardClient'
+
 export const metadata = {
-  title: 'Dashboard Admin',
+  title: 'Dashboard - Admin',
 }
 
-export default function AdminDashboard() {
+export default async function AdminDashboardPage() {
+  const supabase = await createClient()
+
+  // Ambil semua data Mahasiswa
+  const { data: mahasiswaList } = await supabase
+    .from('profiles')
+    .select('id, nama, nim_nip, prodi, role')
+    .eq('role', 'mahasiswa')
+    .order('nama', { ascending: true })
+
+  // Ambil semua data Dosen
+  const { data: dosenList } = await supabase
+    .from('profiles')
+    .select('id, nama, nim_nip, prodi, role')
+    .eq('role', 'dosen')
+    .order('nama', { ascending: true })
+
+  // Ambil Mahasiswa yang Sudah Perwalian
+  const { data: perwalianData } = await supabase
+    .from('perwalian')
+    .select('mahasiswa_id')
+
   return (
-    <div>
-      <h2 className="text-2xl font-bold text-gray-900 mb-6">Dashboard Admin</h2>
-      <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
-        <p className="text-gray-600">
-          Selamat datang di halaman Admin. Gunakan menu di sidebar untuk mengelola data perwalian.
-        </p>
-      </div>
+    <div className="max-w-6xl mx-auto">
+      <h2 className="text-2xl font-bold text-gray-900 mb-6">Dashboard Administrator</h2>
+      <DashboardClient 
+        mahasiswaList={mahasiswaList || []}
+        dosenList={dosenList || []}
+        perwalianData={perwalianData || []}
+      />
     </div>
   )
 }

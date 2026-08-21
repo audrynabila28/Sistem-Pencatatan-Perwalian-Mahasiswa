@@ -35,6 +35,7 @@ let menuItems: MenuItem[] = []
       { name: 'Dashboard', href: '/admin', icon: LayoutDashboard },
       { name: 'Tambah Mahasiswa', href: '/admin/tambah-mahasiswa', icon: Users },
       { name: 'Tambah Dosen', href: '/admin/tambah-dosen', icon: Users },
+      { name: 'Import Massal', href: '/admin/import', icon: Users },
       { name: 'Kelola Dosen Wali', href: '/admin/dosen-wali', icon: Settings },
       { name: 'Rekap Perwalian', href: '/admin/rekap', icon: FileText },
     ]

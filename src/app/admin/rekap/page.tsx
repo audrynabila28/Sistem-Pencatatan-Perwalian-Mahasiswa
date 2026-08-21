@@ -2,6 +2,8 @@ import { createClient } from '@/utils/supabase/server'
 import { format } from 'date-fns'
 import { id } from 'date-fns/locale'
 
+import ExportButton from './ExportButton'
+
 export const metadata = {
   title: 'Rekap Perwalian - Admin',
 }
@@ -26,7 +28,7 @@ export default async function RekapPerwalianPage() {
     <div className="max-w-6xl mx-auto">
       <div className="flex justify-between items-center mb-6">
         <h2 className="text-2xl font-bold text-gray-900">Rekap Data Perwalian</h2>
-        {/* Fitur ekspor bisa ditambahkan di sini nanti */}
+        <ExportButton data={rekap || []} />
       </div>
 
       <div className="bg-white rounded-lg shadow-sm border border-gray-200 overflow-hidden">
@@ -66,11 +68,11 @@ export default async function RekapPerwalianPage() {
                     </td>
                     <td className="px-6 py-4">
                       <div className="text-sm font-medium text-gray-900">{(item.mahasiswa as any)?.nama || '-'}</div>
-                      <div className="text-sm text-gray-500">{item.mahasiswa?.[0]?.nim_nip}</div>
+                      <div className="text-sm text-gray-500">{(item.mahasiswa as any)?.nim_nip || '-'}</div>
                     </td>
                     <td className="px-6 py-4">
-                      <div className="text-sm font-medium text-gray-900">{(item.mahasiswa as any)?.nim_nip || '-'}</div>
-                      <div className="text-sm text-gray-500">{item.dosen?.[0]?.nim_nip}</div>
+                      <div className="text-sm font-medium text-gray-900">{(item.dosen as any)?.nama || '-'}</div>
+                      <div className="text-sm text-gray-500">{(item.dosen as any)?.nim_nip || '-'}</div>
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
                       {item.tahun_akademik} - {item.semester}
