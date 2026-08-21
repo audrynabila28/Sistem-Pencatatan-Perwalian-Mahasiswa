@@ -63,7 +63,7 @@ export default async function HistoriMahasiswaPage() {
                       {item.tahun_akademik} - {item.semester}
                     </td>
                     <td className="px-6 py-4">
-                      <div className="text-sm font-medium text-gray-900">{item.dosen?.nama}</div>
+                      <div className="text-sm font-medium text-gray-900">{item.dosen?.[0]?.nama || '-'}</div>
                     </td>
                     <td className="px-6 py-4 text-sm text-gray-900">
                       {item.catatan_mahasiswa || '-'}
