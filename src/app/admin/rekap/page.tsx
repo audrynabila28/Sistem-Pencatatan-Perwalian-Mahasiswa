@@ -1,6 +1,7 @@
 import { createClient } from '@/utils/supabase/server'
 import { format } from 'date-fns'
 import { id } from 'date-fns/locale'
+import ExportPerwalianButton from './exportPerwalianButton'
 
 export const metadata = {
   title: 'Rekap Perwalian - Admin',
@@ -9,24 +10,85 @@ export const metadata = {
 export default async function RekapPerwalianPage() {
   const supabase = await createClient()
 
-  const { data: rekap } = await supabase
+  const { data: rekap, error } = await supabase
     .from('perwalian')
     .select(`
       id,
       tanggal,
       tahun_akademik,
       semester,
+      status,
       catatan_mahasiswa,
-      mahasiswa:profiles!perwalian_mahasiswa_id_fkey(nama, nim_nip),
-      dosen:profiles!perwalian_dosen_id_fkey(nama, nim_nip)
+      mahasiswa:profiles!perwalian_mahasiswa_id_fkey(
+        nama,
+        nim_nip
+      ),
+      dosen:profiles!perwalian_dosen_id_fkey(
+        nama,
+        nim_nip
+      )
     `)
     .order('tanggal', { ascending: false })
 
+  if (error) {
+    console.error('Error mengambil data perwalian:', error)
+
+    return (
+      <div className="max-w-6xl mx-auto">
+        <div className="bg-red-50 border border-red-200 rounded-lg p-6">
+          <h2 className="text-lg font-semibold text-red-800">
+            Gagal mengambil data
+          </h2>
+          <p className="text-sm text-red-600 mt-1">
+            {error.message}
+          </p>
+        </div>
+      </div>
+    )
+  }
+
   return (
-    <div className="max-w-6xl mx-auto">
+    <div className="max-w-7xl mx-auto">
       <div className="flex justify-between items-center mb-6">
-        <h2 className="text-2xl font-bold text-gray-900">Rekap Data Perwalian</h2>
-        {/* Fitur ekspor bisa ditambahkan di sini nanti */}
+        <div>
+          <h2 className="text-2xl font-bold text-gray-900">
+            Rekap Data Perwalian
+          </h2>
+          <p className="mt-1 text-sm text-gray-600">
+            Monitoring seluruh data dan status perwalian mahasiswa.
+          </p>
+        </div>
+        <ExportPerwalianButton data={rekap || []} />
+      </div>
+
+      <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-6">
+        <div className="bg-white rounded-lg border border-gray-200 shadow-sm p-4">
+          <p className="text-sm text-gray-500">Diajukan</p>
+          <p className="mt-1 text-2xl font-bold text-yellow-600">
+            {rekap?.filter((item) => item.status === 'diajukan').length || 0}
+          </p>
+        </div>
+
+        <div className="bg-white rounded-lg border border-gray-200 shadow-sm p-4">
+          <p className="text-sm text-gray-500">Diproses</p>
+          <p className="mt-1 text-2xl font-bold text-blue-600">
+            {rekap?.filter((item) => item.status === 'diproses').length || 0}
+          </p>
+        </div>
+
+        <div className="bg-white rounded-lg border border-gray-200 shadow-sm p-4">
+          <p className="text-sm text-gray-500">Diterima</p>
+          <p className="mt-1 text-2xl font-bold text-green-600">
+            {rekap?.filter((item) => item.status === 'diterima').length || 0}
+          </p>
+        </div>
+
+        <div className="bg-white rounded-lg border border-gray-200 shadow-sm p-4">
+          <p className="text-sm text-gray-500">Ditolak</p>
+          <p className="mt-1 text-2xl font-bold text-red-600">
+            {rekap?.filter((item) => item.status === 'ditolak').length || 0}
+          </p>
+        </div>
       </div>
 
       <div className="bg-white rounded-lg shadow-sm border border-gray-200 overflow-hidden">
@@ -34,49 +96,196 @@ export default async function RekapPerwalianPage() {
           <table className="min-w-full divide-y divide-gray-200">
             <thead className="bg-gray-50">
               <tr>
-                <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                <th
+                  scope="col"
+                  className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
+                >
                   Tanggal
                 </th>
-                <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                <th
+                  scope="col"
+                  className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
+                >
                   Mahasiswa
                 </th>
-                <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                <th
+                  scope="col"
+                  className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
+                >
                   Dosen Wali
                 </th>
-                <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                <th
+                  scope="col"
+                  className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
+                >
                   Tahun/Semester
                 </th>
-                <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                <th
+                  scope="col"
+                  className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
+                >
+                  Status
+                </th>
+                <th
+                  scope="col"
+                  className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
+                >
+                  Keterangan
+                </th>
+                <th
+                  scope="col"
+                  className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
+                >
                   Catatan
                 </th>
               </tr>
             </thead>
+
             <tbody className="bg-white divide-y divide-gray-200">
               {!rekap || rekap.length === 0 ? (
                 <tr>
-                  <td colSpan={5} className="px-6 py-8 text-center text-sm text-gray-500">
+                  <td
+                    colSpan={7}
+                    className="px-6 py-8 text-center text-sm text-gray-500"
+                  >
                     Belum ada data perwalian.
                   </td>
                 </tr>
               ) : (
                 rekap.map((item) => (
-                  <tr key={item.id} className="hover:bg-gray-50">
-                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
-                      {format(new Date(item.tanggal), 'dd MMM yyyy HH:mm', { locale: id })}
+                  <tr
+                    key={item.id}
+                    className="hover:bg-gray-50 transition-colors"
+                  >
+                    <td className="px-6 py-4 whitespace-nowrap">
+                      <div className="text-sm text-gray-900">
+                        {format(new Date(item.tanggal), 'dd MMM yyyy', {
+                          locale: id,
+                        })}
+                      </div>
+                      <div className="text-xs text-gray-500 mt-1">
+                        {format(new Date(item.tanggal), 'HH:mm', {
+                          locale: id,
+                        })}
+                      </div>
                     </td>
+
                     <td className="px-6 py-4">
-                      <div className="text-sm font-medium text-gray-900">{(item.mahasiswa as any)?.nama || '-'}</div>
-                      <div className="text-sm text-gray-500">{item.mahasiswa?.[0]?.nim_nip}</div>
+                      <div className="text-sm font-medium text-gray-900">
+                        {(item.mahasiswa as any)?.nama || '-'}
+                      </div>
+                      <div className="text-sm text-gray-500">
+                        {(item.mahasiswa as any)?.nim_nip || '-'}
+                      </div>
                     </td>
+
                     <td className="px-6 py-4">
-                      <div className="text-sm font-medium text-gray-900">{(item.mahasiswa as any)?.nim_nip || '-'}</div>
-                      <div className="text-sm text-gray-500">{item.dosen?.[0]?.nim_nip}</div>
+                      <div className="text-sm font-medium text-gray-900">
+                        {(item.dosen as any)?.nama || '-'}
+                      </div>
+                      <div className="text-sm text-gray-500">
+                        {(item.dosen as any)?.nim_nip || '-'}
+                      </div>
                     </td>
-                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
-                      {item.tahun_akademik} - {item.semester}
+
+                    <td className="px-6 py-4 whitespace-nowrap">
+                      <div className="text-sm text-gray-900">
+                        {item.tahun_akademik}
+                      </div>
+                      <div className="text-xs text-gray-500 mt-1">
+                        Semester {item.semester}
+                      </div>
                     </td>
-                    <td className="px-6 py-4 text-sm text-gray-900 max-w-xs truncate" title={item.catatan_mahasiswa}>
-                      {item.catatan_mahasiswa || '-'}
+
+                    <td className="px-6 py-4 whitespace-nowrap">
+                      {item.status === 'diajukan' && (
+                        <span className="inline-flex items-center px-3 py-1 rounded-full text-xs font-semibold bg-yellow-100 text-yellow-800">
+                          Diajukan
+                        </span>
+                      )}
+
+                      {item.status === 'diproses' && (
+                        <span className="inline-flex items-center px-3 py-1 rounded-full text-xs font-semibold bg-blue-100 text-blue-800">
+                          Diproses
+                        </span>
+                      )}
+
+                      {item.status === 'diterima' && (
+                        <span className="inline-flex items-center px-3 py-1 rounded-full text-xs font-semibold bg-green-100 text-green-800">
+                          Diterima
+                        </span>
+                      )}
+
+                      {item.status === 'ditolak' && (
+                        <span className="inline-flex items-center px-3 py-1 rounded-full text-xs font-semibold bg-red-100 text-red-800">
+                          Ditolak
+                        </span>
+                      )}
+
+                      {!item.status && (
+                        <span className="text-sm text-gray-400">-</span>
+                      )}
+                    </td>
+
+                    <td className="px-6 py-4">
+                      {item.status === 'diajukan' && (
+                        <div>
+                          <p className="text-sm font-medium text-yellow-700">
+                            Menunggu diproses
+                          </p>
+                          <p className="text-xs text-gray-500 mt-1">
+                            Pengajuan menunggu pemeriksaan dosen wali.
+                          </p>
+                        </div>
+                      )}
+
+                      {item.status === 'diproses' && (
+                        <div>
+                          <p className="text-sm font-medium text-blue-700">
+                            Sedang diproses
+                          </p>
+                          <p className="text-xs text-gray-500 mt-1">
+                            Pengajuan sedang diperiksa oleh dosen wali.
+                          </p>
+                        </div>
+                      )}
+
+                      {item.status === 'diterima' && (
+                        <div>
+                          <p className="text-sm font-medium text-green-700">
+                            Perwalian diterima
+                          </p>
+                          <p className="text-xs text-gray-500 mt-1">
+                            Pengajuan telah disetujui oleh dosen wali.
+                          </p>
+                        </div>
+                      )}
+
+                      {item.status === 'ditolak' && (
+                        <div>
+                          <p className="text-sm font-medium text-red-700">
+                            Perwalian ditolak
+                          </p>
+                          <p className="text-xs text-gray-500 mt-1">
+                            Pengajuan tidak disetujui oleh dosen wali.
+                          </p>
+                        </div>
+                      )}
+
+                      {!item.status && (
+                        <span className="text-sm text-gray-400">
+                          Belum ada status
+                        </span>
+                      )}
+                    </td>
+
+                    <td
+                      className="px-6 py-4 text-sm text-gray-900 max-w-xs"
+                      title={item.catatan_mahasiswa || ''}
+                    >
+                      <div className="truncate">
+                        {item.catatan_mahasiswa || '-'}
+                      </div>
                     </td>
                   </tr>
                 ))
