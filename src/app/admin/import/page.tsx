@@ -9,7 +9,7 @@ export default function ImportDataPage() {
   const [role, setRole] = useState<'mahasiswa' | 'dosen'>('mahasiswa')
   const [file, setFile] = useState<File | null>(null)
   const [loading, setLoading] = useState(false)
-  const [result, setResult] = useState<{ success: boolean; summary: string; errors: string[] } | null>(null)
+  const [result, setResult] = useState<{ success: boolean; summary?: string; message?: string; errors?: string[] } | null>(null)
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files && e.target.files[0]) {
