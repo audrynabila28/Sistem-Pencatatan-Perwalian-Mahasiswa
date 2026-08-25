@@ -39,6 +39,7 @@ CREATE TABLE perwalian (
     tahun_akademik TEXT NOT NULL,
     semester TEXT NOT NULL CHECK (semester IN ('Ganjil', 'Genap', 'Pendek')),
     catatan_mahasiswa TEXT,
+    status TEXT NOT NULL DEFAULT 'diajukan' CHECK (status IN ('diajukan', 'diproses', 'diterima', 'ditolak')),
     created_at TIMESTAMP WITH TIME ZONE DEFAULT TIMEZONE('utc'::text, NOW()) NOT NULL
 );
 
@@ -87,6 +88,20 @@ CREATE POLICY "Mahasiswa can insert own perwalian" ON perwalian
 
 CREATE POLICY "Dosen can view perwalian of their mahasiswa" ON perwalian
     FOR SELECT USING (auth.uid() = dosen_id);
+
+CREATE POLICY "Admin can update perwalian" ON perwalian
+    FOR UPDATE USING (
+        auth.uid() IN (SELECT id FROM profiles WHERE role = 'admin')
+    ) WITH CHECK (
+        auth.uid() IN (SELECT id FROM profiles WHERE role = 'admin')
+    );
+
+CREATE POLICY "Dosen can update their perwalian" ON perwalian
+    FOR UPDATE USING (
+        auth.uid() = dosen_id
+    ) WITH CHECK (
+        auth.uid() = dosen_id
+    );
 
 -- Untuk Admin pertama, Anda harus mendaftar via Supabase Auth (misal email admin@stmik.edu, pass password123)
 -- lalu insert profilnya:
