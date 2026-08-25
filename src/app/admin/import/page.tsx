@@ -152,27 +152,27 @@ export default function ImportDataPage() {
       </div>
 
       {result && (
-        <div className={`rounded-lg border p-6 ${result.success ? (result.errors.length > 0 ? 'bg-yellow-50 border-yellow-200' : 'bg-green-50 border-green-200') : 'bg-red-50 border-red-200'}`}>
+        <div className={`rounded-lg border p-6 ${result.success ? ((result.errors || []).length > 0 ? 'bg-yellow-50 border-yellow-200' : 'bg-green-50 border-green-200') : 'bg-red-50 border-red-200'}`}>
           <div className="flex items-center mb-4">
-            {result.success && result.errors.length === 0 ? (
+            {result.success && (result.errors || []).length === 0 ? (
               <CheckCircle2 className="h-6 w-6 text-green-600 mr-2" />
             ) : (
               <AlertCircle className={`h-6 w-6 mr-2 ${result.success ? 'text-yellow-600' : 'text-red-600'}`} />
             )}
-            <h3 className={`text-lg font-medium ${result.success ? (result.errors.length > 0 ? 'text-yellow-800' : 'text-green-800') : 'text-red-800'}`}>
-              Hasil Import: {result.summary}
+            <h3 className={`text-lg font-medium ${result.success ? ((result.errors || []).length > 0 ? 'text-yellow-800' : 'text-green-800') : 'text-red-800'}`}>
+              Hasil Import: {result.summary || result.message}
             </h3>
           </div>
           
-          {result.errors.length > 0 && (
+          {(result.errors || []).length > 0 && (
             <div className="bg-white rounded p-4 border border-gray-100 max-h-40 overflow-y-auto text-sm text-gray-700">
               <p className="font-semibold mb-2">Detail Error:</p>
               <ul className="list-disc list-inside space-y-1">
-                {result.errors.map((err, i) => (
+                {(result.errors || []).map((err, i) => (
                   <li key={i}>{err}</li>
                 ))}
               </ul>
-              {result.errors.length === 10 && (
+              {(result.errors || []).length === 10 && (
                 <p className="text-gray-500 italic mt-2">...dan error lainnya disembunyikan.</p>
               )}
             </div>
