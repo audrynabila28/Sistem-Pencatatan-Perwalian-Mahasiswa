@@ -37,6 +37,7 @@ export default async function HistoriMahasiswaPage() {
       semester,
       status,
       catatan_mahasiswa,
+      keterangan_status,
       dosen:profiles!perwalian_dosen_id_fkey(
         nama,
         nim_nip
@@ -70,6 +71,7 @@ export default async function HistoriMahasiswaPage() {
         <h2 className="text-2xl font-bold text-gray-900">
           Histori Perwalian Saya
         </h2>
+
         <p className="mt-2 text-sm text-gray-600">
           Berikut adalah riwayat pengajuan perwalian Anda dan perkembangan statusnya.
         </p>
@@ -82,6 +84,7 @@ export default async function HistoriMahasiswaPage() {
           <p className="text-sm text-gray-500">
             Diajukan
           </p>
+
           <p className="mt-1 text-2xl font-bold text-yellow-600">
             {histori?.filter(
               (item) => item.status === 'diajukan'
@@ -94,6 +97,7 @@ export default async function HistoriMahasiswaPage() {
           <p className="text-sm text-gray-500">
             Diproses
           </p>
+
           <p className="mt-1 text-2xl font-bold text-blue-600">
             {histori?.filter(
               (item) => item.status === 'diproses'
@@ -106,6 +110,7 @@ export default async function HistoriMahasiswaPage() {
           <p className="text-sm text-gray-500">
             Diterima
           </p>
+
           <p className="mt-1 text-2xl font-bold text-green-600">
             {histori?.filter(
               (item) => item.status === 'diterima'
@@ -118,6 +123,7 @@ export default async function HistoriMahasiswaPage() {
           <p className="text-sm text-gray-500">
             Ditolak
           </p>
+
           <p className="mt-1 text-2xl font-bold text-red-600">
             {histori?.filter(
               (item) => item.status === 'ditolak'
@@ -139,30 +145,35 @@ export default async function HistoriMahasiswaPage() {
                 >
                   Tanggal
                 </th>
+
                 <th
                   scope="col"
                   className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
                 >
                   Tahun/Semester
                 </th>
+
                 <th
                   scope="col"
                   className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
                 >
                   Dosen Wali
                 </th>
+
                 <th
                   scope="col"
                   className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
                 >
                   Status
                 </th>
+
                 <th
                   scope="col"
                   className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
                 >
                   Keterangan
                 </th>
+
                 <th
                   scope="col"
                   className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
@@ -198,6 +209,7 @@ export default async function HistoriMahasiswaPage() {
                           { locale: id }
                         )}
                       </div>
+
                       <div className="text-xs text-gray-500 mt-1">
                         {format(
                           new Date(item.tanggal),
@@ -212,6 +224,7 @@ export default async function HistoriMahasiswaPage() {
                       <div className="text-sm text-gray-900">
                         {item.tahun_akademik}
                       </div>
+
                       <div className="text-xs text-gray-500 mt-1">
                         Semester {item.semester}
                       </div>
@@ -222,6 +235,7 @@ export default async function HistoriMahasiswaPage() {
                       <div className="text-sm font-medium text-gray-900">
                         {(item.dosen as any)?.nama || '-'}
                       </div>
+
                       <div className="text-sm text-gray-500">
                         {(item.dosen as any)?.nim_nip || '-'}
                       </div>
@@ -267,6 +281,7 @@ export default async function HistoriMahasiswaPage() {
                           <p className="text-sm font-medium text-yellow-700">
                             Menunggu diproses
                           </p>
+
                           <p className="text-xs text-gray-500 mt-1">
                             Pengajuan Anda telah berhasil dikirim dan menunggu pemeriksaan dosen wali.
                           </p>
@@ -278,6 +293,7 @@ export default async function HistoriMahasiswaPage() {
                           <p className="text-sm font-medium text-blue-700">
                             Sedang diproses
                           </p>
+
                           <p className="text-xs text-gray-500 mt-1">
                             Pengajuan sedang diperiksa oleh dosen wali.
                           </p>
@@ -289,6 +305,7 @@ export default async function HistoriMahasiswaPage() {
                           <p className="text-sm font-medium text-green-700">
                             Perwalian diterima
                           </p>
+
                           <p className="text-xs text-gray-500 mt-1">
                             Pengajuan perwalian Anda telah disetujui oleh dosen wali.
                           </p>
@@ -300,9 +317,16 @@ export default async function HistoriMahasiswaPage() {
                           <p className="text-sm font-medium text-red-700">
                             Perwalian ditolak
                           </p>
-                          <p className="text-xs text-gray-500 mt-1">
-                            Pengajuan perwalian Anda tidak disetujui oleh dosen wali.
-                          </p>
+
+                          {item.keterangan_status ? (
+                            <p className="text-sm text-red-600 mt-1">
+                              {item.keterangan_status}
+                            </p>
+                          ) : (
+                            <p className="text-xs text-gray-500 mt-1">
+                              Tidak ada keterangan penolakan.
+                            </p>
+                          )}
                         </div>
                       )}
 
@@ -313,7 +337,7 @@ export default async function HistoriMahasiswaPage() {
                       )}
                     </td>
 
-                    {/* Catatan */}
+                    {/* Catatan Mahasiswa */}
                     <td className="px-6 py-4">
                       <div className="text-sm text-gray-900 max-w-xs">
                         {item.catatan_mahasiswa || '-'}

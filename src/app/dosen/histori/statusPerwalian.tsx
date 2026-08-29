@@ -13,8 +13,13 @@ export default function StatusPerwalian({
   status
 }: StatusPerwalianProps) {
   const [loading, setLoading] = useState(false)
+  const [showKeterangan, setShowKeterangan] = useState(false)
+  const [keterangan, setKeterangan] = useState('')
 
-  const updateStatus = async (newStatus: string) => {
+  const updateStatus = async (
+    newStatus: string,
+    keteranganStatus: string | null = null
+  ) => {
     setLoading(true)
 
     try {
@@ -23,7 +28,8 @@ export default function StatusPerwalian({
       const { error } = await supabase
         .from('perwalian')
         .update({
-          status: newStatus
+          status: newStatus,
+          keterangan_status: keteranganStatus
         })
         .eq('id', id)
 
@@ -55,27 +61,73 @@ export default function StatusPerwalian({
   // Status DIPROSES
   if (status === 'diproses') {
     return (
-      <div className="flex gap-2">
-        <button
-          onClick={() => updateStatus('diterima')}
-          disabled={loading}
-          className="px-3 py-2 rounded-lg bg-green-600 text-white text-xs font-medium hover:bg-green-700 disabled:opacity-50"
-        >
-          Terima
-        </button>
+      <div className="space-y-3">
+        <div className="flex gap-2">
+          <button
+            onClick={() => updateStatus('diterima')}
+            disabled={loading}
+            className="px-3 py-2 rounded-lg bg-green-600 text-white text-xs font-medium hover:bg-green-700 disabled:opacity-50"
+          >
+            Terima
+          </button>
 
-        <button
-          onClick={() => updateStatus('ditolak')}
-          disabled={loading}
-          className="px-3 py-2 rounded-lg bg-red-600 text-white text-xs font-medium hover:bg-red-700 disabled:opacity-50"
-        >
-          Tolak
-        </button>
+          <button
+            onClick={() => setShowKeterangan(true)}
+            disabled={loading}
+            className="px-3 py-2 rounded-lg bg-red-600 text-white text-xs font-medium hover:bg-red-700 disabled:opacity-50"
+          >
+            Tolak
+          </button>
+        </div>
+
+        {showKeterangan && (
+          <div className="w-72 p-3 bg-red-50 border border-red-200 rounded-lg">
+            <label className="block text-xs font-medium text-red-800 mb-2">
+              Keterangan Penolakan
+            </label>
+
+            <textarea
+              value={keterangan}
+              onChange={(e) => setKeterangan(e.target.value)}
+              rows={3}
+              placeholder="Masukkan alasan penolakan..."
+              className="w-full border border-red-300 rounded-md p-2 text-xs text-gray-900 bg-white focus:outline-none focus:ring-2 focus:ring-red-500"
+            />
+
+            <div className="flex gap-2 mt-2">
+              <button
+                onClick={() => {
+                  if (!keterangan.trim()) {
+                    alert('Keterangan penolakan wajib diisi.')
+                    return
+                  }
+
+                  updateStatus('ditolak', keterangan.trim())
+                }}
+                disabled={loading}
+                className="px-3 py-2 rounded-lg bg-red-600 text-white text-xs font-medium hover:bg-red-700 disabled:opacity-50"
+              >
+                {loading ? 'Menyimpan...' : 'Konfirmasi Tolak'}
+              </button>
+
+              <button
+                onClick={() => {
+                  setShowKeterangan(false)
+                  setKeterangan('')
+                }}
+                disabled={loading}
+                className="px-3 py-2 rounded-lg bg-gray-200 text-gray-700 text-xs font-medium hover:bg-gray-300 disabled:opacity-50"
+              >
+                Batal
+              </button>
+            </div>
+          </div>
+        )}
       </div>
     )
   }
 
-  // Status selesai
+  // Status DITERIMA
   if (status === 'diterima') {
     return (
       <span className="text-xs font-medium text-green-600">
@@ -84,6 +136,7 @@ export default function StatusPerwalian({
     )
   }
 
+  // Status DITOLAK
   if (status === 'ditolak') {
     return (
       <span className="text-xs font-medium text-red-600">
