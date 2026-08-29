@@ -40,6 +40,7 @@ CREATE TABLE perwalian (
     semester TEXT NOT NULL CHECK (semester IN ('Ganjil', 'Genap', 'Pendek')),
     catatan_mahasiswa TEXT,
     status TEXT NOT NULL DEFAULT 'diajukan' CHECK (status IN ('diajukan', 'diproses', 'diterima', 'ditolak')),
+    keterangan_status TEXT,
     created_at TIMESTAMP WITH TIME ZONE DEFAULT TIMEZONE('utc'::text, NOW()) NOT NULL
 );
 

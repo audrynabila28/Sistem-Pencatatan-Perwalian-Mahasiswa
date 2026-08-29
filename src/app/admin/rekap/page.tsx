@@ -19,6 +19,7 @@ export default async function RekapPerwalianPage() {
       semester,
       status,
       catatan_mahasiswa,
+      keterangan_status,
       mahasiswa:profiles!perwalian_mahasiswa_id_fkey(
         nama,
         nim_nip
@@ -58,7 +59,7 @@ export default async function RekapPerwalianPage() {
             Monitoring seluruh data dan status perwalian mahasiswa.
           </p>
         </div>
-        <ExportPerwalianButton data={rekap || []} />
+        <ExportPerwalianButton data={(rekap as any) || []} />
       </div>
 
       <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-6">
@@ -258,9 +259,15 @@ export default async function RekapPerwalianPage() {
                           <p className="text-sm font-medium text-red-700">
                             Perwalian ditolak
                           </p>
-                          <p className="text-xs text-gray-500 mt-1">
-                            Pengajuan tidak disetujui oleh dosen wali.
-                          </p>
+                          {(item as any).keterangan_status ? (
+                            <p className="text-sm text-red-600 mt-1">
+                              {(item as any).keterangan_status}
+                            </p>
+                          ) : (
+                            <p className="text-xs text-gray-500 mt-1">
+                              Pengajuan tidak disetujui oleh dosen wali.
+                            </p>
+                          )}
                         </div>
                       )}
 

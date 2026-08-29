@@ -40,6 +40,7 @@ export default async function HistoriDosenPage() {
       semester,
       status,
       catatan_mahasiswa,
+      keterangan_status,
       mahasiswa:profiles!perwalian_mahasiswa_id_fkey(
         nama,
         nim_nip
@@ -304,9 +305,15 @@ export default async function HistoriDosenPage() {
                             Ditolak
                           </span>
 
-                          <p className="mt-1 text-xs text-gray-500">
-                            Perwalian ditolak
-                          </p>
+                          {(item as any).keterangan_status ? (
+                            <p className="mt-1 text-xs text-red-600">
+                              {(item as any).keterangan_status}
+                            </p>
+                          ) : (
+                            <p className="mt-1 text-xs text-gray-500">
+                              Perwalian ditolak
+                            </p>
+                          )}
                         </div>
                       )}
 

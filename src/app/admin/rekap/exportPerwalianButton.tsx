@@ -9,8 +9,9 @@ type Perwalian = {
   semester: string
   status: string
   catatan_mahasiswa: string | null
-  mahasiswa: { nama: string; nim_nip: string }[]
-  dosen: { nama: string; nim_nip: string }[]
+  keterangan_status?: string | null
+  mahasiswa: { nama: string; nim_nip: string } | null
+  dosen: { nama: string; nim_nip: string } | null
 }
 
 const STATUS_LABEL: Record<string, string> = {
@@ -36,7 +37,8 @@ export default function ExportPerwalianButton({ data }: { data: Perwalian[] }) {
       'Tahun Akademik',
       'Semester',
       'Status',
-      'Catatan',
+      'Catatan Mahasiswa',
+      'Keterangan Dosen',
     ]
 
     const rows = data.map((item) => [
@@ -45,14 +47,15 @@ export default function ExportPerwalianButton({ data }: { data: Perwalian[] }) {
         month: 'long',
         year: 'numeric',
       }),
-      item.mahasiswa?.[0]?.nama || '-',
-      item.mahasiswa?.[0]?.nim_nip || '-',
-      item.dosen?.[0]?.nama || '-',
-      item.dosen?.[0]?.nim_nip || '-',
+      item.mahasiswa?.nama || '-',
+      item.mahasiswa?.nim_nip || '-',
+      item.dosen?.nama || '-',
+      item.dosen?.nim_nip || '-',
       item.tahun_akademik,
       item.semester,
       STATUS_LABEL[item.status] || item.status,
       item.catatan_mahasiswa || '-',
+      item.keterangan_status || '-',
     ])
 
     // Buat worksheet dari array of arrays
